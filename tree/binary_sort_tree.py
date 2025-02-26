@@ -26,13 +26,21 @@ class BinarySortTree(object):
                 for i in range(len(values)):
                     self.add(values[i])
 
-    def is_empty(self):
+    def is_empty(self) -> bool:
         return self.root is None
 
-    def search_node(self, key):
-        pass
+    def search_node(self, key) -> TriNode:
+        # O(log_2{n} ~ O(n))
+        p = self.root
+        while (p is not None) and (key != p.data):
+            if key < p.data:
+                p = p.left
+            else:
+                p = p.right
+        return p if (p is not None) else None
 
-    def add(self, x):
+    def add(self, x) -> bool:
+        # O(log_2{n} ~ O(n))
         if self.root is None:
             self.root = TriNode(data=x)
         else:
@@ -52,8 +60,42 @@ class BinarySortTree(object):
                 parent.right = TriNode(data=x, parent=parent, left=None, right=None)
         return True
 
+    def remove(self, key) -> TriNode:
+        p = self.search_node(key)
+        if (p is not None) and (p.left is not None) and (p.right is not None):
+            insucc = self.__first(p.right)
+            temp = p.data
+            p.data = insucc.data
+            insucc.data = temp
+            p = insucc
+        if (p is not None) and (p is self.root):
+            if self.root.left is not None:
+                self.root = p.left
+            else:
+                self.root = p.right
+            if self.root is not None:
+                self.root.parent = None
+            return p.data
+        if (p is not None) and (p is p.parent.left):
+            if p.left is not None:
+                p.parent.left = p.left
+                p.left.parent = p.parent
+            else:
+                p.parent.left = p.right
+                if p.right is not None:
+                    p.right.parent = p.parent
+        if (p is not None) and (p is p.parent.right):
+            if p.left is not None:
+                p.parent.right = p.left
+                p.left.parent = p.parent
+            else:
+                p.parent.right = p.right
+                if p.right is not None:
+                    p.right.parent = p.parent
+        return p.data if (p is not None) else None
+
     @staticmethod
-    def __first(p: TriNode):
+    def __first(p: TriNode) -> TriNode:
         if p is not None:
             while p.left is not None:
                 p = p.left
@@ -69,13 +111,32 @@ class BinarySortTree(object):
                 p = p.parent
         return None
 
-    def toString(self):
+    def toString(self) -> str:
         res = "["
         p = self.__first(self.root)
         while p is not None:
             res += p.toString() + " "
             p = self.__next(p)
         return res + "]"
+
+    def size(self):
+        pass
+
+    def clear(self):
+        self.root = None
+
+    def contains(self, item):
+        pass
+
+    def addAll(self, values):
+        for i in range(len(values)):
+            self.add(values[i])
+
+    def previous(self, p: TriNode) -> TriNode:
+        pass
+
+    def last(self: TriNode) -> TriNode:
+        pass
 
 
 def level_traversal(tree):

@@ -39,14 +39,23 @@ class BinaryTree(object):
     def is_empty(self):
         return self.root is None
 
+    def level(self, key)->int:
+        pass
+
     def size(self):
         return self.__size(self.root)
+
+    def search(self, key) -> BinaryNode:
+        pass
 
     def __size(self, p):
         if p is None:
             return 0
         else:
             return 1 + self.__size(p.left) + self.__size(p.right)
+
+    def insert(self):
+        pass
 
     def __str__(self):
         return
@@ -88,6 +97,12 @@ class BinaryTree(object):
                 p = stack.pop()
                 p = p.right
         print()
+
+    def in_order(self):
+        pass
+
+    def post_order(self):
+        pass
 
 
 if __name__ == '__main__':
